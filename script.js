@@ -291,13 +291,17 @@ contactForm.addEventListener('submit', async (e) => {
     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Sending...</span>';
     
     try {
-        // Submit form data
-        const formData = new FormData(contactForm);
-        const response = await fetch(contactForm.action, {
+        // Submit form data to Vercel API
+        const response = await fetch('/api/send-email', {
             method: 'POST',
-            body: formData,
+            body: JSON.stringify({
+                name: nameInput.value.trim(),
+                email: emailInput.value.trim(),
+                subject: subjectInput.value.trim(),
+                message: messageInput.value.trim()
+            }),
             headers: {
-                'Accept': 'application/json'
+                'Content-Type': 'application/json'
             }
         });
         

@@ -1,3 +1,44 @@
+// Theme Toggle Logic
+const themeToggle = document.getElementById('theme-toggle');
+const themeIcon = themeToggle.querySelector('i');
+const htmlElement = document.documentElement;
+
+// Check for saved theme preference
+const savedTheme = localStorage.getItem('theme');
+const systemTheme = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+
+function setTheme(theme) {
+    htmlElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+
+    if (theme === 'light') {
+        themeIcon.classList.remove('fa-sun');
+        themeIcon.classList.add('fa-moon');
+    } else {
+        themeIcon.classList.remove('fa-moon');
+        themeIcon.classList.add('fa-sun');
+    }
+
+    // Update particles if they exist
+    if (typeof init === 'function') {
+        init();
+    }
+}
+
+// Initialize theme
+if (savedTheme) {
+    setTheme(savedTheme);
+} else {
+    setTheme(systemTheme);
+}
+
+// Toggle Event Listener
+themeToggle.addEventListener('click', () => {
+    const currentTheme = htmlElement.getAttribute('data-theme');
+    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+});
+
 // Particle Background Animation
 const canvas = document.getElementById('bg-canvas');
 const ctx = canvas.getContext('2d');
@@ -44,27 +85,49 @@ class Particle {
 function init() {
     particlesArray = [];
     let numberOfParticles = (canvas.height * canvas.width) / 9000;
+
+    // Get color from CSS variable
+    const computedStyle = getComputedStyle(document.documentElement);
+    const particleColor = computedStyle.getPropertyValue('--particle-color').trim();
+
     for (let i = 0; i < numberOfParticles; i++) {
         let size = (Math.random() * 2) + 1;
         let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
         let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
         let directionX = (Math.random() * 0.4) - 0.2;
         let directionY = (Math.random() * 0.4) - 0.2;
-        let color = '#00f2ff'; // Cyan color
 
-        particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+        particlesArray.push(new Particle(x, y, directionX, directionY, size, particleColor));
     }
 }
 
 // Check if particles are close enough to draw line
 function connect() {
     let opacityValue = 1;
+    // Get color from CSS variable for lines
+    const computedStyle = getComputedStyle(document.documentElement);
+    const particleColor = computedStyle.getPropertyValue('--particle-color').trim();
+
+    // Convert hex to rgb for opacity handling if needed, or just use the hex and let canvas handle it if it was rgba
+    // For simplicity, we'll assume the hex is passed and we might need to parse it if we want dynamic opacity with rgba string
+    // But the original code used 'rgba(0, 242, 255,' + opacityValue + ')'
+    // Let's parse the hex to rgb
+
+    let r = 0, g = 0, b = 0;
+    if (particleColor.startsWith('#')) {
+        if (particleColor.length === 7) {
+            r = parseInt(particleColor.slice(1, 3), 16);
+            g = parseInt(particleColor.slice(3, 5), 16);
+            b = parseInt(particleColor.slice(5, 7), 16);
+        }
+    }
+
     for (let a = 0; a < particlesArray.length; a++) {
         for (let b = a; b < particlesArray.length; b++) {
             let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x)) + ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
             if (distance < (canvas.width / 7) * (canvas.height / 7)) {
                 opacityValue = 1 - (distance / 20000);
-                ctx.strokeStyle = 'rgba(0, 242, 255,' + opacityValue + ')';
+                ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${opacityValue})`;
                 ctx.lineWidth = 1;
                 ctx.beginPath();
                 ctx.moveTo(particlesArray[a].x, particlesArray[a].y);

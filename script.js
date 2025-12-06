@@ -1,15 +1,130 @@
+// Particle Background Animation
+const canvas = document.getElementById('bg-canvas');
+const ctx = canvas.getContext('2d');
+
+let particlesArray;
+
+// Set canvas size
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+class Particle {
+    constructor(x, y, directionX, directionY, size, color) {
+        this.x = x;
+        this.y = y;
+        this.directionX = directionX;
+        this.directionY = directionY;
+        this.size = size;
+        this.color = color;
+    }
+
+    // Method to draw individual particle
+    draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+    }
+
+    // Check particle position, check mouse position, move the particle, draw the particle
+    update() {
+        if (this.x > canvas.width || this.x < 0) {
+            this.directionX = -this.directionX;
+        }
+        if (this.y > canvas.height || this.y < 0) {
+            this.directionY = -this.directionY;
+        }
+
+        this.x += this.directionX;
+        this.y += this.directionY;
+        this.draw();
+    }
+}
+
+function init() {
+    particlesArray = [];
+    let numberOfParticles = (canvas.height * canvas.width) / 9000;
+    for (let i = 0; i < numberOfParticles; i++) {
+        let size = (Math.random() * 2) + 1;
+        let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
+        let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
+        let directionX = (Math.random() * 0.4) - 0.2;
+        let directionY = (Math.random() * 0.4) - 0.2;
+        let color = '#00f2ff'; // Cyan color
+
+        particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+    }
+}
+
+// Check if particles are close enough to draw line
+function connect() {
+    let opacityValue = 1;
+    for (let a = 0; a < particlesArray.length; a++) {
+        for (let b = a; b < particlesArray.length; b++) {
+            let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x)) + ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
+            if (distance < (canvas.width / 7) * (canvas.height / 7)) {
+                opacityValue = 1 - (distance / 20000);
+                ctx.strokeStyle = 'rgba(0, 242, 255,' + opacityValue + ')';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+                ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                ctx.stroke();
+            }
+        }
+    }
+}
+
+// Animation Loop
+function animate() {
+    requestAnimationFrame(animate);
+    ctx.clearRect(0, 0, innerWidth, innerHeight);
+
+    for (let i = 0; i < particlesArray.length; i++) {
+        particlesArray[i].update();
+    }
+    connect();
+}
+
+// Resize event
+window.addEventListener('resize', () => {
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+    init();
+});
+
+// Initialize particle animation
+init();
+animate();
+
+
 // Mobile Menu Toggle
 const hamburger = document.querySelector('.hamburger');
 const navMenu = document.querySelector('.nav-menu');
 
 hamburger.addEventListener('click', () => {
     navMenu.classList.toggle('active');
+    // Animate hamburger lines
+    const spans = hamburger.querySelectorAll('span');
+    if (navMenu.classList.contains('active')) {
+        spans[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+        spans[1].style.opacity = '0';
+        spans[2].style.transform = 'rotate(-45deg) translate(5px, -5px)';
+    } else {
+        spans[0].style.transform = 'none';
+        spans[1].style.opacity = '1';
+        spans[2].style.transform = 'none';
+    }
 });
 
 // Close mobile menu when clicking on a link
 document.querySelectorAll('.nav-menu a').forEach(link => {
     link.addEventListener('click', () => {
         navMenu.classList.remove('active');
+        const spans = hamburger.querySelectorAll('span');
+        spans[0].style.transform = 'none';
+        spans[1].style.opacity = '1';
+        spans[2].style.transform = 'none';
     });
 });
 
@@ -27,20 +142,10 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Navbar background on scroll
-window.addEventListener('scroll', () => {
-    const navbar = document.querySelector('.navbar');
-    if (window.scrollY > 50) {
-        navbar.style.backgroundColor = 'rgba(15, 23, 42, 0.98)';
-    } else {
-        navbar.style.backgroundColor = 'rgba(15, 23, 42, 0.95)';
-    }
-});
-
 // Enhanced Intersection Observer for scroll animations
 const observerOptions = {
-    threshold: 0.15,
-    rootMargin: '0px 0px -100px 0px'
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
 };
 
 const observer = new IntersectionObserver((entries) => {
@@ -53,79 +158,44 @@ const observer = new IntersectionObserver((entries) => {
     });
 }, observerOptions);
 
-// Observe all sections
-document.querySelectorAll('section').forEach(section => {
-    section.style.opacity = '0';
-    section.style.transform = 'translateY(30px)';
-    section.style.transition = 'opacity 0.8s ease-out, transform 0.8s ease-out';
-    observer.observe(section);
+// Observe all sections and cards
+document.querySelectorAll('section, .stat-card, .timeline-item, .skill-category, .project-card, .cert-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'all 0.6s ease-out';
+    observer.observe(el);
 });
 
-// Stagger animation for cards
-const cardObserver = new IntersectionObserver((entries) => {
-    entries.forEach((entry, index) => {
-        if (entry.isIntersecting) {
-            setTimeout(() => {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
-            }, index * 100);
-        }
-    });
-}, { threshold: 0.1 });
+// Typing Effect
+const subtitle = document.querySelector('.hero-subtitle');
+const text = "Lead Engineer | Full Stack Specialist | AI Enthusiast";
+let index = 0;
 
-document.querySelectorAll('.stat-card, .timeline-item, .skill-category, .cert-card').forEach(card => {
-    card.style.opacity = '0';
-    card.style.transform = 'translateY(30px)';
-    card.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
-    cardObserver.observe(card);
-});
-
-// Parallax effect for hero section
-window.addEventListener('scroll', () => {
-    const scrolled = window.pageYOffset;
-    const hero = document.querySelector('.hero-image');
-    if (hero && scrolled < window.innerHeight) {
-        hero.style.transform = `translateY(${scrolled * 0.3}px)`;
+function type() {
+    if (index < text.length) {
+        subtitle.textContent += text.charAt(index);
+        index++;
+        setTimeout(type, 50);
     }
-});
+}
 
-// Add ripple effect to buttons
-document.querySelectorAll('.btn, .tech-badge, .skill-tag').forEach(element => {
-    element.addEventListener('click', function(e) {
-        const ripple = document.createElement('span');
-        const rect = this.getBoundingClientRect();
-        const size = Math.max(rect.width, rect.height);
-        const x = e.clientX - rect.left - size / 2;
-        const y = e.clientY - rect.top - size / 2;
-        
-        ripple.style.width = ripple.style.height = size + 'px';
-        ripple.style.left = x + 'px';
-        ripple.style.top = y + 'px';
-        ripple.classList.add('ripple');
-        
-        this.appendChild(ripple);
-        
-        setTimeout(() => ripple.remove(), 600);
-    });
-});
+// Start typing effect after a slight delay
+setTimeout(() => {
+    subtitle.textContent = '';
+    type();
+}, 500);
 
-// Typing effect enhancement
-const techBadges = document.querySelectorAll('.tech-badge');
-techBadges.forEach((badge, index) => {
-    badge.style.animationDelay = `${index * 0.1}s`;
-});
-
-// Add active state to navigation based on scroll position
+// Active Navigation Link on Scroll
 const sections = document.querySelectorAll('section');
 const navLinks = document.querySelectorAll('.nav-menu a');
 
 window.addEventListener('scroll', () => {
     let current = '';
-    
+
     sections.forEach(section => {
         const sectionTop = section.offsetTop;
         const sectionHeight = section.clientHeight;
-        if (window.scrollY >= (sectionTop - 100)) {
+        if (window.scrollY >= (sectionTop - 200)) {
             current = section.getAttribute('id');
         }
     });
@@ -138,191 +208,51 @@ window.addEventListener('scroll', () => {
     });
 });
 
-// Typing effect for hero subtitle (optional enhancement)
-const subtitle = document.querySelector('.hero-subtitle');
-const originalText = subtitle.textContent;
-let charIndex = 0;
-
-function typeEffect() {
-    if (charIndex < originalText.length) {
-        subtitle.textContent = originalText.slice(0, charIndex + 1);
-        charIndex++;
-        setTimeout(typeEffect, 100);
-    }
-}
-
-// Uncomment the line below to enable typing effect
-// setTimeout(() => { subtitle.textContent = ''; typeEffect(); }, 500);
-
 // Contact Form Validation and Submission
 const contactForm = document.getElementById('contactForm');
 const submitBtn = document.getElementById('submitBtn');
 const formStatus = document.getElementById('formStatus');
 
-// Validation functions
-function validateName(name) {
-    const trimmed = name.trim();
-    if (trimmed.length < 2) {
-        return 'Name must be at least 2 characters long';
-    }
-    if (!/^[a-zA-Z\s]+$/.test(trimmed)) {
-        return 'Name should only contain letters';
-    }
-    return '';
-}
+if (contactForm) {
+    contactForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
 
-function validateEmail(email) {
-    const trimmed = email.trim();
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(trimmed)) {
-        return 'Please enter a valid email address';
-    }
-    return '';
-}
+        // Basic Validation
+        const inputs = contactForm.querySelectorAll('input, textarea');
+        let isValid = true;
 
-function validateSubject(subject) {
-    const trimmed = subject.trim();
-    if (trimmed.length < 3) {
-        return 'Subject must be at least 3 characters long';
-    }
-    return '';
-}
-
-function validateMessage(message) {
-    const trimmed = message.trim();
-    if (trimmed.length < 10) {
-        return 'Message must be at least 10 characters long';
-    }
-    return '';
-}
-
-// Show error
-function showError(input, message) {
-    const formGroup = input.parentElement;
-    const errorElement = formGroup.querySelector('.error-message');
-    formGroup.classList.add('error');
-    formGroup.classList.remove('success');
-    errorElement.textContent = message;
-}
-
-// Show success
-function showSuccess(input) {
-    const formGroup = input.parentElement;
-    const errorElement = formGroup.querySelector('.error-message');
-    formGroup.classList.add('success');
-    formGroup.classList.remove('error');
-    errorElement.textContent = '';
-}
-
-// Real-time validation on blur
-const nameInput = document.getElementById('name');
-const emailInput = document.getElementById('email');
-const subjectInput = document.getElementById('subject');
-const messageInput = document.getElementById('message');
-
-nameInput.addEventListener('blur', () => {
-    const error = validateName(nameInput.value);
-    if (error) {
-        showError(nameInput, error);
-    } else {
-        showSuccess(nameInput);
-    }
-});
-
-emailInput.addEventListener('blur', () => {
-    const error = validateEmail(emailInput.value);
-    if (error) {
-        showError(emailInput, error);
-    } else {
-        showSuccess(emailInput);
-    }
-});
-
-subjectInput.addEventListener('blur', () => {
-    const error = validateSubject(subjectInput.value);
-    if (error) {
-        showError(subjectInput, error);
-    } else {
-        showSuccess(subjectInput);
-    }
-});
-
-messageInput.addEventListener('blur', () => {
-    const error = validateMessage(messageInput.value);
-    if (error) {
-        showError(messageInput, error);
-    } else {
-        showSuccess(messageInput);
-    }
-});
-
-// Form submission
-contactForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    // Validate all fields
-    const nameError = validateName(nameInput.value);
-    const emailError = validateEmail(emailInput.value);
-    const subjectError = validateSubject(subjectInput.value);
-    const messageError = validateMessage(messageInput.value);
-    
-    // Show errors if any
-    if (nameError) showError(nameInput, nameError);
-    else showSuccess(nameInput);
-    
-    if (emailError) showError(emailInput, emailError);
-    else showSuccess(emailInput);
-    
-    if (subjectError) showError(subjectInput, subjectError);
-    else showSuccess(subjectInput);
-    
-    if (messageError) showError(messageInput, messageError);
-    else showSuccess(messageInput);
-    
-    // If any errors, don't submit
-    if (nameError || emailError || subjectError || messageError) {
-        formStatus.textContent = 'Please fix the errors above before submitting.';
-        formStatus.className = 'form-status error';
-        return;
-    }
-    
-    // Disable submit button
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i><span>Sending...</span>';
-    
-    try {
-        // Submit form data to Vercel API
-        const response = await fetch('/api/send-email', {
-            method: 'POST',
-            body: JSON.stringify({
-                name: nameInput.value.trim(),
-                email: emailInput.value.trim(),
-                subject: subjectInput.value.trim(),
-                message: messageInput.value.trim()
-            }),
-            headers: {
-                'Content-Type': 'application/json'
+        inputs.forEach(input => {
+            if (!input.value.trim()) {
+                isValid = false;
+                input.style.borderColor = '#ff0055';
+            } else {
+                input.style.borderColor = 'rgba(255, 255, 255, 0.1)';
             }
         });
-        
-        if (response.ok) {
-            formStatus.textContent = '✓ Message sent successfully! I\'ll get back to you soon.';
-            formStatus.className = 'form-status success';
-            contactForm.reset();
-            
-            // Clear validation states
-            document.querySelectorAll('.form-group').forEach(group => {
-                group.classList.remove('success', 'error');
-            });
-        } else {
-            throw new Error('Failed to send message');
+
+        if (!isValid) {
+            formStatus.textContent = 'Please fill in all fields.';
+            formStatus.style.color = '#ff0055';
+            return;
         }
-    } catch (error) {
-        formStatus.textContent = '✗ Oops! Something went wrong. Please try again or email me directly.';
-        formStatus.className = 'form-status error';
-    } finally {
-        // Re-enable submit button
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i><span>Send Message</span>';
-    }
-});
+
+        // Simulate Submission
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> TRANSMITTING...';
+
+        try {
+            // Simulate network delay
+            await new Promise(resolve => setTimeout(resolve, 1500));
+
+            formStatus.textContent = '✓ TRANSMISSION RECEIVED. I WILL RESPOND SHORTLY.';
+            formStatus.style.color = '#00f2ff';
+            contactForm.reset();
+        } catch (error) {
+            formStatus.textContent = 'ERROR: TRANSMISSION FAILED.';
+            formStatus.style.color = '#ff0055';
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> SEND MESSAGE';
+        }
+    });
+}

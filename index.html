@@ -60,7 +60,7 @@
     }
     </script>
     <link rel="icon" type="image/jpeg" href="profile-photo.jpg">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=3">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -88,6 +88,9 @@
                 <li><a href="#certifications" title="Certifications"><i class="fas fa-certificate"></i></a></li>
                 <li><a href="#education" title="Education"><i class="fas fa-graduation-cap"></i></a></li>
                 <li><a href="#contact" title="Contact"><i class="fas fa-envelope"></i></a></li>
+                <!-- Link to Analyst Profile -->
+                <!-- <li><a href="analyst.html" title="Data Analyst Profile" style="color: #10b981;"><i
+                            class="fas fa-chart-line"></i></a></li> -->
             </ul>
             <div class="hamburger">
                 <span></span>
@@ -127,21 +130,7 @@
             </div>
             <div class="hero-image">
                 <div class="avatar-container">
-                    <svg class="avatar-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                        <!-- Background Circle -->
-                        <circle cx="100" cy="100" r="95" fill="url(#avatarGradient)" />
-                        <!-- Head -->
-                        <circle cx="100" cy="80" r="35" fill="#E4E6EB" />
-                        <!-- Body -->
-                        <ellipse cx="100" cy="155" rx="50" ry="60" fill="#E4E6EB" />
-                        <!-- Gradient Definition -->
-                        <defs>
-                            <linearGradient id="avatarGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
-                                <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
-                            </linearGradient>
-                        </defs>
-                    </svg>
+                    <img src="hero_avatar.png" alt="Apoorv Vyas - Tech Lead" class="hero-avatar-img">
                 </div>
             </div>
         </div>
@@ -398,111 +387,132 @@
         <div class="container">
             <h2 class="section-title">Key Projects</h2>
             <div class="projects-grid">
+
+                <!-- Project 1: Diathrive -->
                 <div class="project-card">
-                    <div class="project-icon">
-                        <i class="fas fa-shopping-cart"></i>
+                    <div class="project-img-container">
+                        <img src="project_diathrive.png" alt="Diathrive Dashboard" class="project-img">
                     </div>
-                    <div class="project-header">
-                        <h3>Diathrive - E-commerce & B2B Platform</h3>
-                        <span class="project-company">Technoidentity</span>
-                    </div>
-                    <p class="project-description">Frontend website for e-commerce and B2B necessities built from
-                        scratch in October CMS. Managed communication with the sidebench team, handled framework setup,
-                        created common components, and deployed to server.</p>
-                    <div class="project-tags">
-                        <span class="tag">October CMS</span>
-                        <span class="tag">E-commerce</span>
-                        <span class="tag">B2B</span>
+                    <div class="project-content">
+                        <div class="project-header">
+                            <h3>Diathrive - E-commerce & B2B</h3>
+                            <span class="project-company">Technoidentity</span>
+                        </div>
+                        <p class="project-description">Frontend website for e-commerce and B2B necessities built from
+                            scratch in October CMS. Managed communication with the team, handled framework setup,
+                            created common components.</p>
+                        <div class="project-tags">
+                            <span class="tag">October CMS</span>
+                            <span class="tag">E-commerce</span>
+                            <span class="tag">B2B</span>
+                        </div>
                     </div>
                 </div>
+
+                <!-- Project 2: Selfsea -->
                 <div class="project-card">
-                    <div class="project-icon">
-                        <i class="fas fa-heartbeat"></i>
+                    <div class="project-img-container">
+                        <img src="project_selfsea.png" alt="Selfsea Health Platform" class="project-img">
                     </div>
-                    <div class="project-header">
-                        <h3>Selfsea (PHE) - Youth Health Platform</h3>
-                        <span class="project-company">Technoidentity</span>
-                    </div>
-                    <p class="project-description">Powered by Peer Health Exchange, provides safe, inclusive,
-                        evidence-based health resources for youth. Developed compliance and security features,
-                        test-driven development, and frontend architecture using React JS and React Native.</p>
-                    <div class="project-tags">
-                        <span class="tag">React</span>
-                        <span class="tag">React Native</span>
-                        <span class="tag">Healthcare</span>
+                    <div class="project-content">
+                        <div class="project-header">
+                            <h3>Selfsea (PHE) - Youth Health</h3>
+                            <span class="project-company">Technoidentity</span>
+                        </div>
+                        <p class="project-description">Powered by Peer Health Exchange, providing safe, evidence-based
+                            health resources. Developed compliance features and frontend architecture using React JS and
+                            React Native.</p>
+                        <div class="project-tags">
+                            <span class="tag">React</span>
+                            <span class="tag">React Native</span>
+                            <span class="tag">Healthcare</span>
+                        </div>
                     </div>
                 </div>
+
+                <!-- Project 3: 1ST -->
                 <div class="project-card">
-                    <div class="project-icon">
-                        <i class="fas fa-tv"></i>
+                    <div class="project-img-container">
+                        <img src="project_1st.png" alt="1ST Betting App" class="project-img">
                     </div>
-                    <div class="project-header">
-                        <h3>1ST - TV Betting Application</h3>
-                        <span class="project-company">Technoidentity</span>
-                    </div>
-                    <p class="project-description">TV application for betting on races with live feeds, video
-                        recordings, and real-time data feeds. Built with React Native, GraphQL, and Phoenix, specially
-                        designed for Android TV and tvOS.</p>
-                    <div class="project-tags">
-                        <span class="tag">React Native</span>
-                        <span class="tag">GraphQL</span>
-                        <span class="tag">Android TV</span>
-                        <span class="tag">tvOS</span>
+                    <div class="project-content">
+                        <div class="project-header">
+                            <h3>1ST - TV Betting App</h3>
+                            <span class="project-company">Technoidentity</span>
+                        </div>
+                        <p class="project-description">TV application for betting with live stats and video feeds. Built
+                            with React Native, GraphQL, and Phoenix, designed for Android TV and tvOS.</p>
+                        <div class="project-tags">
+                            <span class="tag">React Native</span>
+                            <span class="tag">GraphQL</span>
+                            <span class="tag">Android TV</span>
+                        </div>
                     </div>
                 </div>
+
+                <!-- Project 4: Homevestors -->
                 <div class="project-card">
-                    <div class="project-icon">
-                        <i class="fas fa-home"></i>
+                    <div class="project-img-container">
+                        <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&h=400&fit=crop"
+                            alt="Homevestors Dashboard" class="project-img">
                     </div>
-                    <div class="project-header">
-                        <h3>Homevestors - Real Estate Management</h3>
-                        <span class="project-company">Technoidentity</span>
-                    </div>
-                    <p class="project-description">Mobile application for real estate agency data management with
-                        advanced notifications and filtering. Focused on compliance, security, and data privacy for
-                        agency workflows.</p>
-                    <div class="project-tags">
-                        <span class="tag">React Native</span>
-                        <span class="tag">Real Estate</span>
-                        <span class="tag">Data Management</span>
+                    <div class="project-content">
+                        <div class="project-header">
+                            <h3>Homevestors - Real Estate</h3>
+                            <span class="project-company">Technoidentity</span>
+                        </div>
+                        <p class="project-description">Mobile application for real estate agency data management with
+                            map integration and investment analytics.</p>
+                        <div class="project-tags">
+                            <span class="tag">Mobile App</span>
+                            <span class="tag">Real Estate</span>
+                            <span class="tag">Data Management</span>
+                        </div>
                     </div>
                 </div>
+
+                <!-- Project 5: JOBMA -->
                 <div class="project-card">
-                    <div class="project-icon">
-                        <i class="fas fa-user-tie"></i>
+                    <div class="project-img-container">
+                        <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&h=400&fit=crop"
+                            alt="JOBMA Platform" class="project-img">
                     </div>
-                    <div class="project-header">
-                        <h3>JOBMA - Recruitment Interview Platform</h3>
-                        <span class="project-company">Select Source International</span>
-                    </div>
-                    <p class="project-description">Quick system for recruitment teams featuring video-audio tests, MCQ
-                        tests, coding challenges, and personality feedback. Built REST APIs and 3-staged applications
-                        using Python, Twilio, and Django.</p>
-                    <div class="project-tags">
-                        <span class="tag">Python</span>
-                        <span class="tag">Django</span>
-                        <span class="tag">React</span>
-                        <span class="tag">Twilio</span>
+                    <div class="project-content">
+                        <div class="project-header">
+                            <h3>JOBMA - Recruitment Platform</h3>
+                            <span class="project-company">Select Source Intl</span>
+                        </div>
+                        <p class="project-description">Recruitment system featuring video-audio tests, coding
+                            challenges, and personality feedback. Built REST APIs using Python and Django.</p>
+                        <div class="project-tags">
+                            <span class="tag">Python</span>
+                            <span class="tag">Django</span>
+                            <span class="tag">React</span>
+                        </div>
                     </div>
                 </div>
+
+                <!-- Project 6: Calling Tool -->
                 <div class="project-card">
-                    <div class="project-icon">
-                        <i class="fas fa-phone-volume"></i>
+                    <div class="project-img-container">
+                        <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&h=400&fit=crop"
+                            alt="Calling Tool" class="project-img">
                     </div>
-                    <div class="project-header">
-                        <h3>3-Pronged Phone Calling Tool</h3>
-                        <span class="project-company">Select Source International</span>
-                    </div>
-                    <p class="project-description">Application for scheduling phone interviews with speech-to-text
-                        transcription using Google Speech API. Built architecture with Django backend and React JS
-                        frontend with Twilio integration.</p>
-                    <div class="project-tags">
-                        <span class="tag">Django</span>
-                        <span class="tag">React</span>
-                        <span class="tag">Twilio</span>
-                        <span class="tag">Speech-to-Text</span>
+                    <div class="project-content">
+                        <div class="project-header">
+                            <h3>Phone Calling Tool</h3>
+                            <span class="project-company">Select Source Intl</span>
+                        </div>
+                        <p class="project-description">Application for scheduling phone interviews with speech-to-text
+                            transcription using Google Speech API and Twilio.</p>
+                        <div class="project-tags">
+                            <span class="tag">Django</span>
+                            <span class="tag">Twilio</span>
+                            <span class="tag">Speech-to-Text</span>
+                        </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </section>
@@ -511,7 +521,7 @@
     <section id="strengths" class="strengths">
         <div class="container">
             <h2 class="section-title">Core Strengths</h2>
-            <p class="section-subtitle">Based on Gallup CliftonStrengths Assessment</p>
+            <p class="section-subtitle">Based on Gallup Clifton Strengths Assessment</p>
             <div class="strengths-grid">
                 <div class="strength-card">
                     <div class="strength-icon"><i class="fas fa-shield-alt"></i></div>

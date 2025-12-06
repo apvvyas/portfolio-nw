@@ -256,3 +256,56 @@ if (contactForm) {
         }
     });
 }
+
+// Floating Navigation Button Logic
+const floatingBtn = document.getElementById('floating-nav-btn');
+const allSections = document.querySelectorAll('section');
+
+function updateFloatingButton() {
+    const scrollPosition = window.scrollY + window.innerHeight / 2;
+    let currentSectionIndex = -1;
+
+    allSections.forEach((section, index) => {
+        const sectionTop = section.offsetTop;
+        const sectionBottom = sectionTop + section.offsetHeight;
+
+        if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+            currentSectionIndex = index;
+        }
+    });
+
+    // If we are at the last section or bottom of page, hide button
+    const scrollBottom = window.innerHeight + window.scrollY;
+    const docHeight = document.documentElement.scrollHeight;
+
+    if (currentSectionIndex === allSections.length - 1 || scrollBottom >= docHeight - 100) {
+        floatingBtn.classList.add('hidden');
+    } else {
+        floatingBtn.classList.remove('hidden');
+    }
+}
+
+if (floatingBtn) {
+    floatingBtn.addEventListener('click', () => {
+        const scrollPosition = window.scrollY + window.innerHeight / 2;
+        let nextSection = null;
+
+        for (let i = 0; i < allSections.length; i++) {
+            const section = allSections[i];
+            const sectionTop = section.offsetTop;
+
+            // Find the first section that starts after our current view
+            if (sectionTop > window.scrollY + 100) {
+                nextSection = section;
+                break;
+            }
+        }
+
+        if (nextSection) {
+            nextSection.scrollIntoView({ behavior: 'smooth' });
+        }
+    });
+
+    window.addEventListener('scroll', updateFloatingButton);
+    updateFloatingButton(); // Initial check
+}
